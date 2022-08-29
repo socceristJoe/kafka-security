@@ -4,13 +4,10 @@
 
 ```
 export CLIPASS=clientpass
-cd ~
-mkdir ssl
-cd ssl
-scp -i ~/kafka-security.pem ubuntu@<<your-public-DNS>>:/home/ubuntu/ssl/ca-cert .
-keytool -keystore kafka.client.truststore.jks -alias CARoot -import -file ca-cert  -storepass $CLIPASS -keypass $CLIPASS -noprompt
+cd /Users/joeqiao/Documents/LocalHub/kafka/kafka-security/Certs
+keytool -keystore kafka.client.truststore.jks -alias CARoot -import -file ca-cert -storepass joeclientpass -keypass joeclientpass -noprompt
 
-keytool -list -v -keystore kafka.client.truststore.jks
+keytool -list -v -keystore kafka.client.truststore.jks -storepass joeclientpass
 ```
 
 ## create client.properties and configure SSL parameters
@@ -22,14 +19,16 @@ ssl.truststore.password
 ## TEST
 test using the console-consumer/-producer and the [client.properties](./client.properties)
 ### Producer
-```
-~/kafka/bin/kafka-console-producer.sh --broker-list <<your-public-DNS>>:9093 --topic kafka-security-topic --producer.config ~/ssl/client.properties
+```z
+/Users/joeqiao/Documents/LocalHub/kafka/kafka_2.13-2.8.1/bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic kafka-security-topic --create --partitions 1 --replication-factor 1
 
-~/kafka/bin/kafka-console-producer.sh --broker-list <<your-public-DNS>>:9093 --topic kafka-security-topic
+/Users/joeqiao/Documents/LocalHub/kafka/kafka_2.13-2.8.1/bin/kafka-console-producer.sh --broker-list localhost:9093 --topic kafka-security-topic --producer.config /Users/joeqiao/Documents/LocalHub/kafka/kafka-security/Setup-SSL/client.properties
 
+/Users/joeqiao/Documents/LocalHub/kafka/kafka_2.13-2.8.1/bin/kafka-console-producer.sh --broker-list localhost:9093 --topic kafka-security-topic
 
+java -Djavax.net.debug=all -Djavax.net.ssl.trustStore=/Users/joeqiao/Documents/LocalHub/kafka/kafka-security/Certs/kafka.client.truststore.jks
 ```
 ### Consumer
 ```
-~/kafka/bin/kafka-console-consumer.sh --bootstrap-server <<your-public-DNS>>:9093 --topic kafka-security-topic --consumer.config ~/ssl/client.properties
+/Users/joeqiao/Documents/LocalHub/kafka/kafka_2.13-2.8.1/bin/kafka-console-consumer.sh --bootstrap-server localhost:9093 --topic kafka-security-topic --consumer.config /Users/joeqiao/Documents/LocalHub/kafka/kafka-security/Setup-SSL/client.properties
 ```

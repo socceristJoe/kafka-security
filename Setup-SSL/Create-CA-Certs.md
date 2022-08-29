@@ -4,7 +4,7 @@ create CA => result: file ca-cert and the priv.key ca-key
 ```
 cd /Users/joeqiao/Documents/LocalHub/kafka/kafka-security/Certs
 
-openssl req -new -newkey rsa:4096 -days 365 -x509 -subj "/CN=Kafka-Security-CA" -keyout ca-key -out ca-cert -nodes
+openssl req -new -newkey rsa:4096 -days 365 -x509 -subj "/CN=Kafka-Security-Joe-Selfsigned-CA" -keyout ca-key -out ca-cert -nodes
 
 cat ca-cert
 cat ca-key
