@@ -10,7 +10,7 @@
 
 ##  setup Kerberos server  
 ```
-sudo yum install -y krb5-server
+yum install -y krb5-server
 ```
 * copy *kdc.conf* to directory /var/kerberos/krb5kdc/
 * copy *kadm5.acl* to directory /var/kerberos/krb5kdc/
@@ -21,14 +21,19 @@ sudo yum install -y krb5-server
 export REALM="KAFKA.SECURE"
 export ADMINPW="this-is-unsecure"
 
-sudo /usr/sbin/kdb5_util create -s -r KAFKA.SECURE -P this-is-unsecure
-sudo kadmin.local -q "add_principal -pw this-is-unsecure admin/admin"
+/usr/sbin/kdb5_util create -s -r KAFKA.SECURE -P this-is-unsecure
+kadmin.local -q "add_principal -pw this-is-unsecure admin/admin"
 
-sudo systemctl restart krb5kdc
-sudo systemctl restart kadmin
+systemctl restart krb5kdc
+systemctl restart kadmin
 ```
 ## check services
 ```
-sudo systemctl status krb5kdc
-sudo systemctl status kadmin
+systemctl status krb5kdc
+systemctl status kadmin
 ```
+
+# Start Kafka Server
+```
+/opt/kafka_2.13-2.8.1/bin/zookeeper-server-start.sh -daemon /opt/kafka_2.13-2.8.1/config/zookeeper.properties
+
